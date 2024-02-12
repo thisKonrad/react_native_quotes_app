@@ -1,4 +1,5 @@
 /* :::: APP :::: */
+import Quotes from './components/Quotes';
 import { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Button } from 'react-native';
@@ -28,8 +29,9 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>{quote.text}</Text>
-      <Text>&mdash; {quote.author}</Text>
+      <Quotes
+        text={quote.text}
+        author={quote.author} />
       <Button
         title="next"
         onPress={handleNextQuote}
