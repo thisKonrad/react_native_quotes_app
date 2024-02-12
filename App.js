@@ -1,5 +1,8 @@
 /* :::: APP :::: */
 import Quotes from './components/Quotes';
+import NewQuote from './components/NewQuote';
+import { AntDesign } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons';
 import { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View, Text, Pressable } from 'react-native';
@@ -15,6 +18,7 @@ const data = [
 export default function App() {
 
   const [index, setIndex] = useState(0);
+  const [showNewQuoteDialog, setNewQuoteDialog] = useState(false);
 
   const quote = data[index];
 
@@ -26,6 +30,12 @@ export default function App() {
     setIndex((index) => (index - 1 + data.length) % data.length);
   };
 
+  const handleInputShow = () => {
+    setNewQuoteDialog(true);
+  }
+  const handleCancelNewQuote = () => {
+    setNewQuoteDialog(false);
+  }
 
   return (
     <View style={styles.container}>
@@ -33,20 +43,34 @@ export default function App() {
         text={quote.text}
         author={quote.author} />
 
+      <Pressable
+        onPress={handleInputShow}
+        style={styles.pressableNew}
+      >
+        <MaterialIcons name="add-box" size={38} color="white" />
+      </Pressable>
+
+      <NewQuote
+        show={showNewQuoteDialog}
+        cancel={handleCancelNewQuote}
+      />
+
       <View style={styles.pressableWrap}>
-        <Pressable
-          style={styles.pressable}
-          onPress={handleNextQuote}
-        >
-          <Text style={styles.pressText}>
-            next</Text>
-        </Pressable>
         <Pressable
           style={styles.pressable}
           onPress={handlePreviousQuote}
         >
           <Text style={styles.pressText}>
-            previous</Text>
+            <AntDesign name="banckward" size={24} color="white" />
+          </Text>
+        </Pressable>
+        <Pressable
+          style={styles.pressable}
+          onPress={handleNextQuote}
+        >
+          <Text style={styles.pressText}>
+            <AntDesign name="forward" size={24} color="white" />
+          </Text>
         </Pressable>
       </View>
 
@@ -62,6 +86,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'dodgerblue',
     alignItems: 'center',
     justifyContent: 'center',
+    fontFamily: 'monospace'
   },
 
   pressableWrap: {
@@ -87,5 +112,10 @@ const styles = StyleSheet.create({
   pressText: {
     color: 'white',
     fontSize: 18,
+  },
+  pressableNew: {
+    position: 'absolute',
+    top: 30,
+    right: 30,
   }
 });
