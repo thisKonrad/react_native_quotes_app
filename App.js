@@ -19,13 +19,13 @@ export default function App() {
 
   function nextQuote() {
 
-    index < data.length ? setIndex(index + 1) : null;
+    index < data.length ? setIndex(index + 1) : setIndex(data[0]);
 
   }
 
   function previousQuote() {
 
-    index > data.length ? setIndex(index - 1) : null;
+    index > data[0] ? setIndex(index - 1) : setIndex(data[-1]);
 
   }
 
