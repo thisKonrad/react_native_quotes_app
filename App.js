@@ -1,3 +1,5 @@
+/* :::: APP :::: */
+import { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Button } from 'react-native';
 
@@ -11,14 +13,34 @@ const data = [
 
 export default function App() {
 
+  const [index, setIndex] = useState(0);
+
+  const quote = data[index];
+
+  function nextQuote() {
+
+    setIndex(index + 1);
+
+  }
+
+  function previousQuote() {
+
+    setIndex(index - 1);
+
+  }
+
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Greed has taken the whole universe, and nobody is worried about thier soul</Text>
-      <Text>--Little Richard</Text>
+      <Text style={styles.text}>{quote.text}</Text>
+      <Text>&mdash; {quote.author}</Text>
       <Button
         title="next"
-        onPress={() => alert('Hi Mom!')}
+        onPress={nextQuote}
+      />
+      <Button
+        title="prev"
+        onPress={previousQuote}
       />
       <StatusBar style="auto" />
     </View>
