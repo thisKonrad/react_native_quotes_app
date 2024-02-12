@@ -32,18 +32,24 @@ export default function App() {
       <Quotes
         text={quote.text}
         author={quote.author} />
-      <View styles={styles.pressableWrap}>
+
+      <View style={styles.pressableWrap}>
         <Pressable
+          style={styles.pressable}
           onPress={handleNextQuote}
         >
-          <Text>next</Text>
+          <Text style={styles.pressText}>
+            next</Text>
         </Pressable>
         <Pressable
+          style={styles.pressable}
           onPress={handlePreviousQuote}
         >
-          <Text>previous</Text>
+          <Text style={styles.pressText}>
+            previous</Text>
         </Pressable>
       </View>
+
       <StatusBar style="auto" />
     </View>
   );
@@ -57,10 +63,29 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+
   pressableWrap: {
+    position: 'absolute',
     display: 'flex',
     justifyContent: 'center',
-    gap: '1.4rem',
-    bottom: 60,
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: 12,
+    bottom: 50,
+    width: 100,
+  },
+  pressable: {
+    padding: '1rem',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    border: '1px solid black',
+    width: 100,
+    height: 25,
+    backgroundColor: 'orange',
+  },
+  pressText: {
+    color: 'white',
+    fontSize: 18,
   }
 });
