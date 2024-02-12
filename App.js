@@ -2,7 +2,7 @@
 import Quotes from './components/Quotes';
 import { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, View, Text, Pressable } from 'react-native';
 
 
 const data = [
@@ -32,14 +32,16 @@ export default function App() {
       <Quotes
         text={quote.text}
         author={quote.author} />
-      <Button
-        title="next"
+      <Pressable
         onPress={handleNextQuote}
-      />
-      <Button
-        title="prev"
+      >
+        <Text>next</Text>
+      </Pressable>
+      <Pressable
         onPress={handlePreviousQuote}
-      />
+      >
+        <Text>previous</Text>
+      </Pressable>
       <StatusBar style="auto" />
     </View>
   );
