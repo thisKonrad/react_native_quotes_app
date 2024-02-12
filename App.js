@@ -17,18 +17,6 @@ export default function App() {
 
   const quote = data[index];
 
-  function nextQuote() {
-
-    index < data.length ? setIndex(index + 1) : setIndex(data[0]);
-
-  }
-
-  function previousQuote() {
-
-    index > data[0] ? setIndex(index - 1) : setIndex(data[-1]);
-
-  }
-
 
   return (
     <View style={styles.container}>
@@ -36,11 +24,11 @@ export default function App() {
       <Text>&mdash; {quote.author}</Text>
       <Button
         title="next"
-        onPress={nextQuote}
+        onPress={() => setIndex(index + 1) % data.length}
       />
       <Button
         title="prev"
-        onPress={previousQuote}
+        onPress={() => setIndex(index - 1) % data.length}
       />
       <StatusBar style="auto" />
     </View>
