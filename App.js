@@ -39,10 +39,10 @@ export default function App() {
   }
 
   const handleSubmit = (content, name) => {
-    handleCancelNewQuote()
-    const newQuotes = [...quotes, { text: content, author: name }];
+    setNewQuoteDialog(false)
+    const newQuotes = [...quotes, { text: content, author: name },];
     setQuotes(newQuotes);
-
+    console.log('Quotes: ', quotes)
   }
 
   return (

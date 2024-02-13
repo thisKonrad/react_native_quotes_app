@@ -37,7 +37,7 @@ export default function NewQuote({ show, cancel, onSubmit }) {
                 style={styles.input}
                 enterKeyHint='done'
                 onChangeText={(text) => setNewAuthor(text)}
-                onSubmitEditing={onSubmit(newQuote, newAuthor)}
+                onSubmitEditing={() => onSubmit(newQuote, newAuthor)}
             />
             <Pressable
                 onPress={cancel}
