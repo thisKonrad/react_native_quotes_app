@@ -1,5 +1,7 @@
 /* :::: NEW QUOTE :::: */
+import Button from '../Button';
 import { useState } from 'react';
+import { MaterialIcons } from '@expo/vector-icons';
 import {
     Modal,
     Pressable,
@@ -39,12 +41,12 @@ export default function NewQuote({ show, cancel, onSubmit }) {
                 onChangeText={(text) => setNewAuthor(text)}
                 onSubmitEditing={() => onSubmit(newQuote, newAuthor)}
             />
-            <Pressable
+            <Button
+                onPress={() => onSubmit(newQuote, newAuthor)}
+                icon={<MaterialCommunityIcons name='checkbox-marked-circle' size={24} color='white' />} />
+            <Button
                 onPress={cancel}
-            >
-                <Text
-                >cancel</Text>
-            </Pressable>
+                icon={<MaterialIcons name='cancel' size={24} color='white' />} />
         </KeyboardAvoidingView>
     </Modal >)
 }
