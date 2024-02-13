@@ -1,6 +1,7 @@
 /* :::: APP :::: */
 import Quotes from './components/Quotes';
 import NewQuote from './components/NewQuote';
+import Button from './components/Button';
 import { AntDesign } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useState } from 'react';
@@ -42,6 +43,8 @@ export default function App() {
     setNewQuoteDialog(false)
     const newQuotes = [...quotes, { text: content, author: name },];
     setQuotes(newQuotes);
+    /* :: show the new quote after submisson: */
+    setIndex(newQuotes.length - 1);
     console.log('Quotes: ', quotes)
   }
 
@@ -50,7 +53,6 @@ export default function App() {
       <Quotes
         text={quote.text}
         author={quote.author} />
-
       <Pressable
         onPress={handleInputShow}
         style={styles.pressableNew}
@@ -60,36 +62,25 @@ export default function App() {
           size={38}
           color='white' />
       </Pressable>
-
       <NewQuote
         show={showNewQuoteDialog}
         cancel={handleCancelNewQuote}
         onSubmit={handleSubmit}
       />
-
       <View style={styles.pressableWrap}>
-        <Pressable
-          style={styles.pressable}
-          onPress={handlePreviousQuote}
-        >
-          <Text style={styles.pressText}>
-            <AntDesign
-              name='banckward'
-              size={24}
-              color='white' />
-          </Text>
-        </Pressable>
-        <Pressable
-          style={styles.pressable}
+        <Button
           onPress={handleNextQuote}
-        >
-          <Text style={styles.pressText}>
-            <AntDesign
-              name='forward'
-              size={24}
-              color='white' />
-          </Text>
-        </Pressable>
+          icon={<AntDesign
+            name='banckward'
+            size={24}
+            color='white' />}
+        />
+        <Button
+          onPress={handlePreviousQuote}
+          icon={<AntDesign
+            name='forward'
+            size={24}
+            color='white' />} />
       </View>
       <StatusBar style='auto' />
     </View>
@@ -116,20 +107,7 @@ const styles = StyleSheet.create({
     bottom: 50,
     width: 100,
   },
-  pressable: {
-    padding: '1rem',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    border: '1px solid black',
-    width: 100,
-    height: 26,
-    backgroundColor: 'orange',
-  },
-  pressText: {
-    color: 'white',
-    fontSize: 18,
-  },
+
   pressableNew: {
     position: 'absolute',
     top: 30,
