@@ -19,15 +19,16 @@ export default function App() {
 
   const [index, setIndex] = useState(0);
   const [showNewQuoteDialog, setNewQuoteDialog] = useState(false);
+  const [quotes, setQuotes] = useState(data);
 
-  const quote = data[index];
+  const quote = quotes[index];
 
   const handleNextQuote = () => {
-    setIndex((index) => (index + 1) % data.length);
+    setIndex((index) => (index + 1) % quotes.length);
   };
 
   const handlePreviousQuote = () => {
-    setIndex((index) => (index - 1 + data.length) % data.length);
+    setIndex((index) => (index - 1 + data.length) % quotes.length);
   };
 
   const handleInputShow = () => {
@@ -35,6 +36,13 @@ export default function App() {
   }
   const handleCancelNewQuote = () => {
     setNewQuoteDialog(false);
+  }
+
+  const handleSubmit = (content, name) => {
+    handleCancelNewQuote()
+    const newQuotes = [...quotes, { text: content, author: name }];
+    setQuotes(newQuotes);
+
   }
 
   return (
@@ -47,12 +55,16 @@ export default function App() {
         onPress={handleInputShow}
         style={styles.pressableNew}
       >
-        <MaterialIcons name="add-box" size={38} color="white" />
+        <MaterialIcons
+          name='add-box'
+          size={38}
+          color='white' />
       </Pressable>
 
       <NewQuote
         show={showNewQuoteDialog}
         cancel={handleCancelNewQuote}
+        onSubmit={handleSubmit}
       />
 
       <View style={styles.pressableWrap}>
@@ -61,7 +73,10 @@ export default function App() {
           onPress={handlePreviousQuote}
         >
           <Text style={styles.pressText}>
-            <AntDesign name="banckward" size={24} color="white" />
+            <AntDesign
+              name='banckward'
+              size={24}
+              color='white' />
           </Text>
         </Pressable>
         <Pressable
@@ -69,12 +84,14 @@ export default function App() {
           onPress={handleNextQuote}
         >
           <Text style={styles.pressText}>
-            <AntDesign name="forward" size={24} color="white" />
+            <AntDesign
+              name='forward'
+              size={24}
+              color='white' />
           </Text>
         </Pressable>
       </View>
-
-      <StatusBar style="auto" />
+      <StatusBar style='auto' />
     </View>
   );
 }
@@ -106,7 +123,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     border: '1px solid black',
     width: 100,
-    height: 25,
+    height: 26,
     backgroundColor: 'orange',
   },
   pressText: {

@@ -13,22 +13,23 @@ export default function Quotes({ text, author }) {
 
 const styles = StyleSheet.create({
     quoteWrap: {
-        display: 'flex',
+        flex: 1,
         justifyContent: 'center',
-        flexDirection: 'column',
+        alignItems: 'center',
         flexWrap: 'wrap',
-        gap: '1rem',
-        width: '90%',
+        flexShrink: 1,
+        gap: 10,
+        width: '96%',
         paddingHorizontal: '4%',
         marginBottom: 45,
     },
     quoteText: {
-        textAlign: 'justify',
+        textAlign: 'center',
         color: 'white',
         fontStyle: 'italic',
         fontSize: 32,
-        letterSpacing: '2px',
-        lineHeight: '2.4rem',
+        letterSpacing: 2,
+        lineHeight: 36,
         fontWeight: '600',
         marginBottom: 6,
     },
@@ -37,6 +38,5 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 16,
         fontWeight: '400',
-
     }
 });

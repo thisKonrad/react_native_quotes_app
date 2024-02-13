@@ -1,30 +1,72 @@
 /* :::: NEW QUOTE :::: */
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { useState } from 'react';
+import {
+    Modal,
+    Pressable,
+    StyleSheet,
+    Text,
+    TextInput,
+    KeyboardAvoidingView,
+    Platform
+}
+    from 'react-native';
 
 
-export default function NewQuote({ show, cancel }) {
+export default function NewQuote({ show, cancel, onSubmit }) {
 
-    if (!show) return null;
+    const [newQuote, setNewQuote] = useState('');
+    const [newAuthor, setNewAuthor] = useState('');
 
-    return (<View style={styles.newQuote}>
-        <Text >New Qoute</Text>
-        <Pressable
-            onPress={cancel}
+    return (<Modal
+        visible={show}
+        onRequestClose={cancel}
+        animationType='slide'
+    >
+        <KeyboardAvoidingView
+            behaviour={Platform === 'ios' ? 'padding' : 'height'}
+            style={styles.newQuoteWrap}
         >
-            <Text
-            >cancel</Text>
-        </Pressable>
-    </View>)
+            <TextInput
+                placeholder='Quote: '
+                style={[styles.input, styles.newQuote]}
+                multiline={true}
+                onChangeText={(text) => setNewQuote(text)}
+            />
+            <TextInput
+                placeholder='Author: '
+                style={styles.input}
+                enterKeyHint='done'
+                onChangeText={(text) => setNewAuthor(text)}
+                onSubmitEditing={onSubmit(newQuote, newAuthor)}
+            />
+            <Pressable
+                onPress={cancel}
+            >
+                <Text
+                >cancel</Text>
+            </Pressable>
+        </KeyboardAvoidingView>
+    </Modal >)
 }
 
 
 const styles = StyleSheet.create({
 
+    newQuoteWrap: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    input: {
+        borderWidth: 1,
+        padding: 8,
+        fontSize: 22,
+        margin: 10,
+        width: '80%',
+    },
     newQuote: {
-        top: 80,
-        position: 'absolute',
-        border: '1px solid black',
-        padding: 10,
+        height: 240,
+        verticalAlign: 'top',
     }
 
 })
