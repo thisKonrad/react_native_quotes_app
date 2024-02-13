@@ -2,14 +2,14 @@
 import Button from '../Button';
 import { useState } from 'react';
 import { MaterialIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import {
     Modal,
-    Pressable,
     StyleSheet,
-    Text,
     TextInput,
     KeyboardAvoidingView,
-    Platform
+    Platform,
+    View,
 }
     from 'react-native';
 
@@ -18,6 +18,24 @@ export default function NewQuote({ show, cancel, onSubmit }) {
 
     const [newQuote, setNewQuote] = useState('');
     const [newAuthor, setNewAuthor] = useState('');
+
+    const cancelNewQuote = () => {
+        cancel()
+        setNewQuote('')
+        setNewAuthor('')
+    }
+
+    const saveNewQuote = () => {
+        const newQuoteTrim = newQuote.trim()
+        const newAuthorTrim = newAuthor.trim()
+        if (newQuoteTrim.length < 8) {
+            alert('Please Enter a valid Quote!')
+            return
+        }
+        onSubmit(newQuoteTrim, newAuthorTrim);
+        setNewQuote('');
+        setNewAuthor('');
+    }
 
     return (<Modal
         visible={show}
@@ -39,14 +57,16 @@ export default function NewQuote({ show, cancel, onSubmit }) {
                 style={styles.input}
                 enterKeyHint='done'
                 onChangeText={(text) => setNewAuthor(text)}
-                onSubmitEditing={() => onSubmit(newQuote, newAuthor)}
+                onSubmitEditing={() => saveNewQuote()}
             />
-            <Button
-                onPress={() => onSubmit(newQuote, newAuthor)}
-                icon={<MaterialCommunityIcons name='checkbox-marked-circle' size={24} color='white' />} />
-            <Button
-                onPress={cancel}
-                icon={<MaterialIcons name='cancel' size={24} color='white' />} />
+            <View style={styles.pressableWrap}>
+                <Button
+                    onPress={() => saveNewQuote()}
+                    icon={<MaterialCommunityIcons name='checkbox-marked-circle' size={24} color='white' />} />
+                <Button
+                    onPress={cancelNewQuote}
+                    icon={<MaterialIcons name='cancel' size={24} color='white' />} />
+            </View>
         </KeyboardAvoidingView>
     </Modal >)
 }
@@ -69,6 +89,17 @@ const styles = StyleSheet.create({
     newQuote: {
         height: 240,
         verticalAlign: 'top',
-    }
+    },
+    pressableWrap: {
+        position: 'absolute',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'row',
+        gap: 12,
+        bottom: 240,
+        width: 100,
+    },
+
 
 })
