@@ -1,11 +1,11 @@
 /* :::: APP :::: */
+import { useEffect, useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Quotes from './components/Quotes';
 import NewQuote from './components/NewQuote';
 import Button from './components/Button';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AntDesign } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
-import { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View, Text, Pressable } from 'react-native';
 
@@ -23,6 +23,11 @@ export default function App() {
   const [showNewQuoteDialog, setNewQuoteDialog] = useState(false);
   const [quotes, setQuotes] = useState(data);
 
+
+  useEffect(() => {
+    getQuotes();
+  }, []);
+
   const quote = quotes[index];
 
   const handleNextQuote = () => {
@@ -30,7 +35,7 @@ export default function App() {
   };
 
   const handlePreviousQuote = () => {
-    setIndex((index) => (index - 1 + data.length) % quotes.length);
+    setIndex((index) => (index - 1 + quotes.length) % quotes.length);
   };
 
   const handleInputShow = () => {
@@ -55,8 +60,12 @@ export default function App() {
 
   async function getQuotes() {
     const quotesFromDB = await AsyncStorage.getItem('Quotes');
-    const getQuotes = JSON.parse(quotesFromDB);
-    quotesFromDB !== 0 ? console.log(getQuotes.length) : console.log('no quotes in DB');
+    if (quotesFromDB !== null) {
+      const parsedQuotes = JSON.parse(quotesFromDB);
+      setQuotes(parsedQuotes);
+      console.log('Quotes: ', parsedQuotes)
+    }
+
   }
 
 
