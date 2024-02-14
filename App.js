@@ -8,28 +8,19 @@ import IconButton from './components/IconButton';
 import { AntDesign } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View, Text, Pressable } from 'react-native';
-
-
-const data = [
-  { text: "Ambition is a dream with an V8 engine", author: "Elvis Presley" },
-  { text: "Erzähle mir nicht wie meine Chancen stehen", author: "Han Solo" },
-  { text: "Hendrix tat genau was ich wollte, ich konnte es nur nicht", author: "Jeff Beck" },
-];
+import { StyleSheet, View, Text, Modal } from 'react-native';
 
 
 export default function App() {
 
   const [index, setIndex] = useState(0);
   const [showNewQuoteDialog, setNewQuoteDialog] = useState(false);
-  const [quotes, setQuotes] = useState(data);
-
+  const [quotes, setQuotes] = useState([]);
 
   useEffect(() => {
     getQuotes();
   }, []);
 
-  const quote = quotes[index];
 
   const handleNextQuote = () => {
     setIndex((index) => (index + 1) % quotes.length);
@@ -42,10 +33,31 @@ export default function App() {
   const handleInputShow = () => {
     setNewQuoteDialog(true);
   }
+
+  /* :::: delete :::: */
+  const handleDeleteQuote = () => {
+    /*  Alert.alert('delete quote?', 'are you sure?', [
+       { text: 'm', style: 'cancel' },
+       { text: 'delete', style: 'destructive', onPress: deleteQuote() }
+     ]); */
+    <Modal></Modal>
+  }
+
+  const deleteQuote = () => {
+    const newQuotes = [...quotes];
+    newQuotes.splice(index, 1)
+    setQuotes(newQuotes);
+    setIndex(0);
+    /* :: save again in async storage :: */
+    saveQuotes(newQuotes);
+  }
+
   const handleCancelNewQuote = () => {
     setNewQuoteDialog(false);
   }
 
+
+  /* :::: submit :::: */
   const handleSubmit = (content, name) => {
     setNewQuoteDialog(false)
     const newQuotes = [...quotes, { text: content, author: name },];
@@ -70,28 +82,38 @@ export default function App() {
   }
 
 
+  /* when all quotes are deleted */
+  let content = <Text style={styles.noQuotesText}>write a quote</Text>;
+  /* ::: else:*/
+  if (quotes.length > 0) {
+    let quote = quotes[index];
+    content = <Quotes
+      text={quote.text}
+      author={quote.author} />
+  }
+
+
   return (
     <View style={styles.container}>
-      <Quotes
-        text={quote.text}
-        author={quote.author} />
-      {/*   <Pressable
-        onPress={handleInputShow}
-        style={styles.pressableNew}
-      >
-        <MaterialIcons
-          name='add-box'
-          size={38}
-          color='white' />
-      </Pressable> */}
-      <IconButton
-        onPress={handleInputShow}
-        icon={<MaterialIcons
-          name='add-box'
-          size={38}
-          color='white' />}
-        style={styles.pressableNew}
-      />
+      {content}
+      <View style={styles.pressableNewQuote}>
+        <IconButton
+          onPress={handleInputShow}
+          icon={<MaterialIcons
+            name='add-box'
+            size={38}
+            color='white' />}
+        />
+      </View>
+      <View style={styles.pressableDeleteQuote}>
+        <IconButton
+          onPress={handleDeleteQuote}
+          icon={<MaterialIcons
+            name='delete'
+            size={38}
+            color='white' />}
+        />
+      </View>
       <NewQuote
         show={showNewQuoteDialog}
         cancel={handleCancelNewQuote}
@@ -138,9 +160,19 @@ const styles = StyleSheet.create({
     width: 100,
   },
 
-  pressableNew: {
+  pressableNewQuote: {
     position: 'absolute',
     top: 30,
     right: 30,
-  }
+  },
+  pressableDeleteQuote: {
+    position: 'absolute',
+    top: 30,
+    left: 30,
+  },
+  noQuotesText: {
+    color: 'white',
+    fontSize: 26,
+    fontStyle: 'italic',
+  },
 });
