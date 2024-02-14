@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Quotes from './components/Quotes';
 import NewQuote from './components/NewQuote';
 import Button from './components/Button';
+import IconButton from './components/IconButton';
 import { AntDesign } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
@@ -74,7 +75,7 @@ export default function App() {
       <Quotes
         text={quote.text}
         author={quote.author} />
-      <Pressable
+      {/*   <Pressable
         onPress={handleInputShow}
         style={styles.pressableNew}
       >
@@ -82,7 +83,15 @@ export default function App() {
           name='add-box'
           size={38}
           color='white' />
-      </Pressable>
+      </Pressable> */}
+      <IconButton
+        onPress={handleInputShow}
+        icon={<MaterialIcons
+          name='add-box'
+          size={38}
+          color='white' />}
+        style={styles.pressableNew}
+      />
       <NewQuote
         show={showNewQuoteDialog}
         cancel={handleCancelNewQuote}
