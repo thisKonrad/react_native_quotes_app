@@ -97,9 +97,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         flexDirection: 'row',
         gap: 12,
-        bottom: 240,
+        top: 30,
         width: 100,
     },
-
 
 })
