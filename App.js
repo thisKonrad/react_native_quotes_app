@@ -2,6 +2,7 @@
 import Quotes from './components/Quotes';
 import NewQuote from './components/NewQuote';
 import Button from './components/Button';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AntDesign } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useState } from 'react';
@@ -45,8 +46,19 @@ export default function App() {
     setQuotes(newQuotes);
     /* :: show the new quote after submisson: */
     setIndex(newQuotes.length - 1);
-    console.log('Quotes: ', quotes)
+    saveQuotes(newQuotes)
   }
+
+  function saveQuotes(newQoutes) {
+    AsyncStorage.setItem('Quotes', JSON.stringify(newQoutes));
+  }
+
+  async function getQuotes() {
+    const quotesFromDB = await AsyncStorage.getItem('Quotes');
+    const getQuotes = JSON.parse(quotesFromDB);
+    quotesFromDB !== 0 ? console.log(getQuotes.length) : console.log('no quotes in DB');
+  }
+
 
   return (
     <View style={styles.container}>
