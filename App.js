@@ -1,7 +1,6 @@
 /* :::: APP :::: */
 import { useEffect, useState } from 'react';
-import * as SQLite from 'expo-sqlite';
-//import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Quotes from './components/Quotes';
 import NewQuote from './components/NewQuote';
 import Button from './components/Button';
@@ -12,13 +11,6 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View, Text, Alert } from 'react-native';
 
 
-const database = SQLite.openDatabase('quotesDB');
-
-/** Create DB Table for SQLite:
- * ID // Text // Author
- * 
- */
-
 export default function App() {
 
   const [index, setIndex] = useState(0);
@@ -27,16 +19,8 @@ export default function App() {
 
   useEffect(() => {
     /* initialize databas: */
-    initDB()
     getQuotes();
   }, []);
-
-  function initDB() {
-    /* create sql table: */
-    database.transaction((tx) => {
-      'CREATE TABLE IF NOT EXISTS quotes ( id INTEGER PRIMARY KEY NOT NULL, text TEXT, author TEXT )'
-    })
-  }
 
   const handleNextQuote = () => {
     setIndex((index) => (index + 1) % quotes.length);
@@ -66,11 +50,12 @@ export default function App() {
   }
 
   const deleteQuote = () => {
+
     const newQuotes = [...quotes];
+    const id = quotes[index].id;
     newQuotes.splice(index, 1);
     setIndex(0);
     setQuotes(newQuotes);
-
     saveQuotes(newQuotes);
   }
 
@@ -80,39 +65,25 @@ export default function App() {
 
 
   /* :::: submit :::: */
-  const handleSubmit = (content, name) => {
+  const handleSubmit = (text, author) => {
     setNewQuoteDialog(false)
-    const newQuotes = [...quotes, { text: content, author: name },];
+    const newQuotes = [...quotes, { text, author },];
     setQuotes(newQuotes);
     /* :: show the new quote after submisson: */
     setIndex(newQuotes.length - 1);
-    /* :: save text && author in SQLite :: */
-    saveQuotes(newQuotes.text, newQuotes.author);
+    saveQuotes(newQuotes);
   }
 
-  function saveQuotes(text, author) {
-    //AsyncStorage.setItem('Quotes', JSON.stringify(newQoutes));
-    database.transaction((tx) =>
-      tx.executeSql('INSERT INTO quotes (text,author) VALUES (?,?)',
-        [text, author],
-        (_, result) => {
-          console.log('INSERT: ', result)
-        }
-      )
-    )
+  function saveQuotes(newQuotes) {
+    AsyncStorage.setItem('Quotes', JSON.stringify(newQuotes));
+
   }
 
   async function getQuotes() {
-    //const quotesFromDB = await AsyncStorage.getItem('Quotes');
-    /* read database table: */
-    database.transaction((tx) =>
-      tx.executeSql('SELECT * FROM quotes', [], (_, result) => {
-        console.log('SELECT: ', result.rows._array)
-      }));
-    let quotesFromDB = null;
+    const quotesFromDB = await AsyncStorage.getItem('Quotes');
     if (quotesFromDB !== null) {
-      const parsedQuotes = JSON.parse(quotesFromDB);
-      setQuotes(parsedQuotes);
+      quotesFromDB = JSON.parse(quotesFromDB);
+      setQuotes(quotesFromDB);
       console.log('Quotes: ', parsedQuotes)
     }
 
