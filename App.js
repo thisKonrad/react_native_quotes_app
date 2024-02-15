@@ -8,7 +8,7 @@ import IconButton from './components/IconButton';
 import { AntDesign } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View, Text, Modal } from 'react-native';
+import { StyleSheet, View, Text, Alert } from 'react-native';
 
 
 export default function App() {
@@ -36,11 +36,17 @@ export default function App() {
 
   /* :::: delete :::: */
   const handleDeleteQuote = () => {
-    /*  Alert.alert('delete quote?', 'are you sure?', [
-       { text: 'm', style: 'cancel' },
-       { text: 'delete', style: 'destructive', onPress: deleteQuote() }
-     ]); */
-    <Modal></Modal>
+    Alert.alert('Delete Quote ?', 'do you want to delete this quote?', [
+      {
+        text: 'cancel',
+        style: 'cancel',
+      },
+      {
+        text: 'delete',
+        style: 'destructive',
+        onPress: () => deleteQuote()
+      },
+    ]);
   }
 
   const deleteQuote = () => {
