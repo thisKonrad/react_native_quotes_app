@@ -51,9 +51,9 @@ export default function App() {
 
   const deleteQuote = () => {
     const newQuotes = [...quotes];
-    newQuotes.splice(index, 1)
-    setQuotes(newQuotes);
+    newQuotes.splice(index, 1);
     setIndex(0);
+    setQuotes(newQuotes);
     /* :: save again in async storage :: */
     saveQuotes(newQuotes);
   }
@@ -111,34 +111,41 @@ export default function App() {
             color='white' />}
         />
       </View>
-      <View style={styles.pressableDeleteQuote}>
-        <IconButton
-          onPress={handleDeleteQuote}
-          icon={<MaterialIcons
-            name='delete'
-            size={38}
-            color='white' />}
-        />
-      </View>
+      {quotes.length > 0 ?
+        <View style={styles.pressableDeleteQuote}>
+          <IconButton
+            onPress={handleDeleteQuote}
+            icon={<MaterialIcons
+              name='delete'
+              size={38}
+              color='white' />}
+          />
+        </View>
+        : null}
       <NewQuote
         show={showNewQuoteDialog}
         cancel={handleCancelNewQuote}
         onSubmit={handleSubmit}
       />
       <View style={styles.pressableWrap}>
-        <Button
-          onPress={handleNextQuote}
-          icon={<AntDesign
-            name='banckward'
-            size={24}
-            color='white' />}
-        />
-        <Button
-          onPress={handlePreviousQuote}
-          icon={<AntDesign
-            name='forward'
-            size={24}
-            color='white' />} />
+        {quotes.length > 1 ?
+          <>
+            <Button
+              onPress={handleNextQuote}
+              icon={<AntDesign
+                name='banckward'
+                size={24}
+                color='white' />}
+            />
+            <Button
+              onPress={handlePreviousQuote}
+              icon={<AntDesign
+                name='forward'
+                size={24}
+                color='white' />} />
+
+          </>
+          : null}
       </View>
       <StatusBar style='auto' />
     </View>
@@ -168,12 +175,12 @@ const styles = StyleSheet.create({
 
   pressableNewQuote: {
     position: 'absolute',
-    top: 30,
+    top: 40,
     right: 30,
   },
   pressableDeleteQuote: {
     position: 'absolute',
-    top: 30,
+    top: 40,
     left: 30,
   },
   noQuotesText: {
