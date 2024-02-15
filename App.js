@@ -32,6 +32,7 @@ export default function App() {
   }, []);
 
   function initDB() {
+    /* create sql table: */
     database.transaction((tx) => {
       'CREATE TABLE IF NOT EXISTS quotes ( id INTEGER PRIMARY KEY NOT NULL, text TEXT, author TEXT )'
     })
@@ -69,7 +70,7 @@ export default function App() {
     newQuotes.splice(index, 1);
     setIndex(0);
     setQuotes(newQuotes);
-    /* :: save again in async storage :: */
+
     saveQuotes(newQuotes);
   }
 
@@ -85,19 +86,29 @@ export default function App() {
     setQuotes(newQuotes);
     /* :: show the new quote after submisson: */
     setIndex(newQuotes.length - 1);
-    saveQuotes(newQuotes)
+    /* :: save text && author in SQLite :: */
+    saveQuotes(newQuotes.text, newQuotes.author);
   }
 
-  function saveQuotes(newQoutes) {
+  function saveQuotes(text, author) {
     //AsyncStorage.setItem('Quotes', JSON.stringify(newQoutes));
+    database.transaction((tx) =>
+      tx.executeSql('INSERT INTO quotes (text,author) VALUES (?,?)',
+        [text, author],
+        (_, result) => {
+          console.log('INSERT: ', result)
+        }
+      )
+    )
   }
 
   async function getQuotes() {
     //const quotesFromDB = await AsyncStorage.getItem('Quotes');
+    /* read database table: */
     database.transaction((tx) =>
       tx.executeSql('SELECT * FROM quotes', [], (_, result) => {
         console.log('SELECT: ', result.rows._array)
-      }))
+      }));
     let quotesFromDB = null;
     if (quotesFromDB !== null) {
       const parsedQuotes = JSON.parse(quotesFromDB);
