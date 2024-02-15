@@ -80,15 +80,12 @@ export default function App() {
   }
 
   async function getQuotes() {
-    const quotesFromDB = await AsyncStorage.getItem('Quotes');
+    let quotesFromDB = await AsyncStorage.getItem('Quotes');
     if (quotesFromDB !== null) {
       quotesFromDB = JSON.parse(quotesFromDB);
       setQuotes(quotesFromDB);
-      console.log('Quotes: ', parsedQuotes)
     }
-
   }
-
 
   /* when all quotes are deleted */
   let content = <Text style={styles.noQuotesText}>write a quote</Text>;
