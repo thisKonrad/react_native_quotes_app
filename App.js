@@ -1,6 +1,7 @@
 /* :::: APP :::: */
 import { useEffect, useState } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as SQLite from 'expo-sqlite';
+//import AsyncStorage from '@react-native-async-storage/async-storage';
 import Quotes from './components/Quotes';
 import NewQuote from './components/NewQuote';
 import Button from './components/Button';
@@ -11,6 +12,13 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View, Text, Alert } from 'react-native';
 
 
+const database = SQLite.openDatabase('quotesDB');
+
+/** Create DB Table for SQLite:
+ * ID // Text // Author
+ * 
+ */
+
 export default function App() {
 
   const [index, setIndex] = useState(0);
@@ -18,9 +26,16 @@ export default function App() {
   const [quotes, setQuotes] = useState([]);
 
   useEffect(() => {
+    /* initialize databas: */
+    initDB()
     getQuotes();
   }, []);
 
+  function initDB() {
+    database.transaction((tx) => {
+      'CREATE TABLE IF NOT EXISTS quotes ( id INTEGER PRIMARY KEY NOT NULL, text TEXT, author TEXT )'
+    })
+  }
 
   const handleNextQuote = () => {
     setIndex((index) => (index + 1) % quotes.length);
@@ -74,11 +89,16 @@ export default function App() {
   }
 
   function saveQuotes(newQoutes) {
-    AsyncStorage.setItem('Quotes', JSON.stringify(newQoutes));
+    //AsyncStorage.setItem('Quotes', JSON.stringify(newQoutes));
   }
 
   async function getQuotes() {
-    const quotesFromDB = await AsyncStorage.getItem('Quotes');
+    //const quotesFromDB = await AsyncStorage.getItem('Quotes');
+    database.transaction((tx) =>
+      tx.executeSql('SELECT * FROM quotes', [], (_, result) => {
+        console.log('SELECT: ', result.rows._array)
+      }))
+    let quotesFromDB = null;
     if (quotesFromDB !== null) {
       const parsedQuotes = JSON.parse(quotesFromDB);
       setQuotes(parsedQuotes);
